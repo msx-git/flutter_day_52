@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "303643350521",
+    "firebase_url": "https://flutter-day-26-default-rtdb.firebaseio.com",
+    "project_id": "flutter-day-26",
+    "storage_bucket": "flutter-day-26.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:303643350521:android:4e2b8d3049417ef22a5928",
+        "android_client_info": {
+          "package_name": "com.example.flutter_day_52"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAjzd_ALf_8zI1SSSdU0TwZwnUIihn3O20"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
