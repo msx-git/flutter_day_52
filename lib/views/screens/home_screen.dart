@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_day_52/models/destinations.dart';
 import 'package:flutter_day_52/services/controller/destinations_controller.dart';
-import 'package:flutter_day_52/services/location_service.dart';
+import 'package:flutter_day_52/views/widgets/add_destination_dialog.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -12,20 +12,20 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  @override
-  void initState() {
-    super.initState();
-    Future.delayed(
-      Duration.zero,
-      () async {
-        await LocationService.getCurrentLocation().then((_) => setState(() {}));
-      },
-    );
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   Future.delayed(
+  //     Duration.zero,
+  //     () async {
+  //       await LocationService.getCurrentLocation().then((_) => setState(() {}));
+  //     },
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
-    final myLocation = LocationService.currentLocation;
+    // final myLocation = LocationService.currentLocation;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Destinations'),
@@ -41,13 +41,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
           if (!snapshot.hasData) {
             return const Center(
-              child: Text("Couldn't fetch categories."),
+              child: Text("Couldn't fetch destinations."),
             );
           }
 
           if (snapshot.data == null || snapshot.data!.docs.isEmpty) {
             return const Center(
-              child: Text("No categories found."),
+              child: Text("No destinations found."),
             );
           }
 
@@ -59,16 +59,21 @@ class _HomeScreenState extends State<HomeScreen> {
               final destination =
                   Destinations.fromSnapshot(destinations[index]);
               return ListTile(
+                leading: Image.network(destination.imageUrl),
                 title: Text(destination.title),
+                subtitle:
+                    Text("lat: ${destination.lat}\nlong: ${destination.long}"),
+                isThreeLine: true,
               );
             },
           );
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-
-        },
+        onPressed: () => showDialog(
+          context: context,
+          builder: (context) => const AddDestinationDialog(),
+        ),
         child: const Icon(Icons.add),
       ),
     );

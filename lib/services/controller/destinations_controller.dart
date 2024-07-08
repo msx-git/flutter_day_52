@@ -11,12 +11,17 @@ class DestinationsController extends ChangeNotifier {
     yield* _destinationsService.getDestinations();
   }
 
-  Future<void> addDestinations({
+  Future<void> addDestination({
     required File imageFile,
     required String title,
     required String lat,
     required String long,
   }) async {
-
+    await _destinationsService.addDestination(
+      imageFile: imageFile,
+      title: title,
+      lat: lat,
+      long: long,
+    );
   }
 }

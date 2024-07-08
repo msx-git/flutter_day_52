@@ -13,7 +13,7 @@ class DestinationsFirebaseService {
     yield* _destinationsCollection.snapshots();
   }
 
-  Future<void> addDestinations({
+  Future<void> addDestination({
     required File imageFile,
     required String title,
     required String lat,
@@ -40,7 +40,7 @@ class DestinationsFirebaseService {
         await _destinationsCollection.add({
           'title': title,
           'imageUrl': imageUrl,
-          'lan': lat,
+          'lat': lat,
           'long': long,
         });
       },
