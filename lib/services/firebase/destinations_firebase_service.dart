@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_day_52/models/destination.dart';
 
 class DestinationsFirebaseService {
   final _destinationsCollection =
@@ -22,7 +23,7 @@ class DestinationsFirebaseService {
     final imageRef = _destinationsStorage
         .ref()
         .child('destinations')
-        .child("${UniqueKey()}.jpg");
+        .child("${DateTime.now().microsecondsSinceEpoch}.jpg");
 
     final uploadTask = imageRef.putFile(imageFile);
 
@@ -45,5 +46,53 @@ class DestinationsFirebaseService {
         });
       },
     );
+  }
+
+  Future<void> editDestination({
+    required String id,
+    required String newTitle,
+    required String imageUrl,
+    required String newLat,
+    required String newLong,
+    required File? newImage,
+  }) async {
+    if (newImage != null) {
+      await _destinationsStorage.refFromURL(imageUrl).delete();
+      imageUrl = await _uploadProductImage(newImage, newTitle);
+    }
+
+    final newDestination = {
+      'title': newTitle,
+      'imageUrl': imageUrl,
+      'lat': newLat,
+      'long': newLong,
+    };
+
+    await _destinationsCollection.doc(id).update(newDestination);
+  }
+
+  Future<void> deleteDestination(Destination destination) async {
+    await _destinationsStorage.refFromURL(destination.imageUrl).delete();
+    await _destinationsCollection.doc(destination.id).delete();
+  }
+
+  Future<String> _uploadProductImage(
+    File image,
+    String title,
+  ) async {
+    final imageRef = _destinationsStorage
+        .ref()
+        .child('destinations')
+        .child("${DateTime.now().microsecondsSinceEpoch}.jpg");
+
+    final uploadTask = imageRef.putData(
+      image.readAsBytesSync(),
+      SettableMetadata(
+        contentType: "image/jpeg",
+      ),
+    );
+
+    await uploadTask.whenComplete(() {});
+    return imageRef.getDownloadURL();
   }
 }

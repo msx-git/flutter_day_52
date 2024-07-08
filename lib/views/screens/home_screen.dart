@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_day_52/models/destination.dart';
 import 'package:flutter_day_52/services/controller/destinations_controller.dart';
 import 'package:flutter_day_52/views/screens/destination_details.dart';
-import 'package:flutter_day_52/views/widgets/add_destination_dialog.dart';
+import 'package:flutter_day_52/views/widgets/manage_destination_dialog.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -55,7 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
           final destinations = snapshot.data!.docs;
 
           return GridView.builder(
-            padding: const EdgeInsets.all(18),
+            padding: const EdgeInsets.all(10),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               childAspectRatio: 100 / 170,
@@ -98,10 +98,15 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                       Expanded(
-                        child: Center(
-                          child: Text(
-                            destination.title,
-                            style: const TextStyle(fontSize: 20),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                          child: Center(
+                            child: FittedBox(
+                              child: Text(
+                                destination.title,
+                                style: const TextStyle(fontSize: 20),
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -117,7 +122,7 @@ class _HomeScreenState extends State<HomeScreen> {
         heroTag: null,
         onPressed: () => showDialog(
           context: context,
-          builder: (context) => const AddDestinationDialog(),
+          builder: (context) => const ManageDestinationDialog(),
         ),
         child: const Icon(Icons.add),
       ),

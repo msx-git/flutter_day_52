@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_day_52/models/destination.dart';
 import 'package:flutter_day_52/services/controller/destinations_controller.dart';
 import 'package:flutter_day_52/utils/extensions.dart';
 import 'package:image_picker/image_picker.dart';
@@ -10,16 +11,19 @@ import '../../services/location_service.dart';
 import '../../utils/show_loader.dart';
 import 'my_text_form_field.dart';
 
-class AddDestinationDialog extends StatefulWidget {
-  const AddDestinationDialog({super.key});
+class ManageDestinationDialog extends StatefulWidget {
+  const ManageDestinationDialog({super.key, this.destination});
+
+  final Destination? destination;
 
   @override
-  State<AddDestinationDialog> createState() => _AddDestinationDialogState();
+  State<ManageDestinationDialog> createState() =>
+      _ManageDestinationDialogState();
 }
 
-class _AddDestinationDialogState extends State<AddDestinationDialog> {
+class _ManageDestinationDialogState extends State<ManageDestinationDialog> {
   final _formKey = GlobalKey<FormState>();
-  final _titleController = TextEditingController();
+  late TextEditingController _titleController;
   File? _imageFile;
   var _myLocation = LocationService.currentLocation;
 
@@ -53,7 +57,7 @@ class _AddDestinationDialogState extends State<AddDestinationDialog> {
     }
   }
 
-  void addCategory() async {
+  void addDestination() async {
     Messages.showLoadingDialog(context);
     await context
         .read<DestinationsController>()
@@ -72,9 +76,32 @@ class _AddDestinationDialogState extends State<AddDestinationDialog> {
     );
   }
 
+  void updateDestination() async {
+    Messages.showLoadingDialog(context);
+    await context
+        .read<DestinationsController>()
+        .editDestination(
+          id: widget.destination!.id,
+          imageUrl: widget.destination!.imageUrl,
+          newImage: _imageFile!,
+          newTitle: _titleController.text,
+          newLat: _myLocation!.latitude.toString(),
+          newLong: _myLocation!.longitude.toString(),
+        )
+        .then(
+      (value) {
+        _titleController.clear();
+        Navigator.pop(context);
+        Navigator.pop(context);
+      },
+    );
+  }
+
   @override
   void initState() {
     super.initState();
+    _titleController =
+        TextEditingController(text: widget.destination?.title ?? "");
     Future.delayed(
       Duration.zero,
       () async {
@@ -94,7 +121,9 @@ class _AddDestinationDialogState extends State<AddDestinationDialog> {
     _myLocation = LocationService.currentLocation;
     return AlertDialog(
       scrollable: true,
-      title: const Text("Add a destination"),
+      title: Text(widget.destination == null
+          ? "Add a destination"
+          : "Edit the destination"),
       content: Form(
         key: _formKey,
         child: Column(
@@ -102,19 +131,25 @@ class _AddDestinationDialogState extends State<AddDestinationDialog> {
           mainAxisSize: MainAxisSize.min,
           children: [
             MyTextFormField(
-              label: "Destination title",
+              label: widget.destination == null
+                  ? "Destination title"
+                  : "New destination title",
               controller: _titleController,
               validator: (value) {
                 if (value!.trim().isEmpty) {
-                  return "Please, enter title of destination!";
+                  return widget.destination == null
+                      ? "Please, enter title of destination!"
+                      : "Please, enter new title of the destination!";
                 }
                 return null;
               },
             ),
             10.height,
-            const Text(
-              "Add picture",
-              style: TextStyle(fontWeight: FontWeight.bold),
+            Text(
+              widget.destination == null
+                  ? "Add picture"
+                  : "Replace with new picture",
+              style: const TextStyle(fontWeight: FontWeight.bold),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -143,7 +178,7 @@ class _AddDestinationDialogState extends State<AddDestinationDialog> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                    "Lat: ${_myLocation?.latitude?.toStringAsFixed(3)}\nLong: ${_myLocation?.longitude?.toStringAsFixed(3)}"),
+                    "Lat: ${_myLocation?.latitude?.toStringAsFixed(3) ?? "loading"}\nLong: ${_myLocation?.longitude?.toStringAsFixed(3) ?? "loading"}"),
                 ElevatedButton(
                   onPressed: () async {
                     await LocationService.getCurrentLocation();
@@ -164,8 +199,9 @@ class _AddDestinationDialogState extends State<AddDestinationDialog> {
           child: const Text("Cancel"),
         ),
         FilledButton(
-          onPressed: addCategory,
-          child: const Text("Add"),
+          onPressed:
+              widget.destination == null ? addDestination : updateDestination,
+          child: Text(widget.destination == null ? "Add" : "Save"),
         ),
       ],
     );
