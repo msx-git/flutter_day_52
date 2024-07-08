@@ -1,13 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Destinations {
+class Destination {
   final String id;
   final String title;
   final String imageUrl;
   final String long;
   final String lat;
 
-  Destinations({
+  Destination({
     required this.id,
     required this.title,
     required this.imageUrl,
@@ -30,8 +30,8 @@ class Destinations {
     };
   }
 
-  factory Destinations.fromSnapshot(QueryDocumentSnapshot query) {
-    return Destinations(
+  factory Destination.fromSnapshot(QueryDocumentSnapshot query) {
+    return Destination(
       id: query.id,
       title: query['title'] as String,
       imageUrl: query['imageUrl'] as String,

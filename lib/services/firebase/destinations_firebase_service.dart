@@ -22,7 +22,7 @@ class DestinationsFirebaseService {
     final imageRef = _destinationsStorage
         .ref()
         .child('destinations')
-        .child("${DateTime.now().microsecondsSinceEpoch}.jpg");
+        .child("${UniqueKey()}.jpg");
 
     final uploadTask = imageRef.putFile(imageFile);
 

@@ -149,7 +149,7 @@ class _AddDestinationDialogState extends State<AddDestinationDialog> {
                     await LocationService.getCurrentLocation();
                     setState(() {});
                   },
-                  child: Text("Get location"),
+                  child: const Text("Get location"),
                 ),
               ],
             )
