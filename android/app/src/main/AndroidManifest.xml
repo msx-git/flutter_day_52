@@ -14,6 +14,10 @@
         android:label="flutter_day_52"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+
+        <meta-data android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDuYbl6-vJHN-5d4HqggKmg1r2DoWah1gQ"/>
+
         <activity
             android:name=".MainActivity"
             android:exported="true"

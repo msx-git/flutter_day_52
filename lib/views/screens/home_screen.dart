@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_day_52/models/destination.dart';
-import 'package:flutter_day_52/services/controller/destinations_controller.dart';
-import 'package:flutter_day_52/views/screens/destination_details.dart';
 import 'package:flutter_day_52/views/widgets/manage_destination_dialog.dart';
 import 'package:provider/provider.dart';
+
+import '../../models/destination.dart';
+import '../../services/controller/destinations_controller.dart';
+import 'destination_details.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -13,17 +14,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   Future.delayed(
-  //     Duration.zero,
-  //     () async {
-  //       await LocationService.getCurrentLocation().then((_) => setState(() {}));
-  //     },
-  //   );
-  // }
-
   @override
   Widget build(BuildContext context) {
     // final myLocation = LocationService.currentLocation;
