@@ -37,7 +37,7 @@ flutter:
   uses-material-design: true
 
   assets:
-    - .env
+    - .env2
   #   - images/a_dot_ham.jpeg
 
   # fonts:
